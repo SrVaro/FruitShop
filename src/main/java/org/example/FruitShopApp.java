@@ -26,20 +26,21 @@ public class FruitShopApp
 
     public static void main( String[] args )
     {
-        //FileReader parser = new FileReader();
-
         Map<String, Product> productMap = new HashMap<>();
 
+        // Se lee el archivo donde se encuentras los productos
         FileReader<Product> productReader = new FileReader<>(new ProductParser());
         List<Product> products = productReader.readFromFile("resources/products.txt", null);
-
         productMap = products.stream().collect(toMap(Product::getName, p -> p));
 
+        // Con las lista de productos se lee el archivo de la compra y se coteja que cada producto exista
         FileReader<Purchase> orderReader = new FileReader<>(new PurchaseParser());
         List<Purchase> purchases = orderReader.readFromFile("resources/purchase.txt", productMap);
 
+        // Se crea la orden con todos los pedidos
         Order order = new Order(purchases);
 
+        // Se crea una lista de todos las ofertas activas
         List<Offer> activeOffers = Arrays.asList(
                 new QuantityDiscountOffer(productMap.get("Apple"), 3, 2),
                 new FreeProductOffer(productMap.get("Pear"), 2, productMap.get("Orange")),
@@ -48,8 +49,8 @@ public class FruitShopApp
 
         order.ApplyOffers(activeOffers);
 
+        // Se muestra por consola el ticket de compra
         ShowReceipt(order);
-
     }
 
     private static void ShowReceipt(Order order) {

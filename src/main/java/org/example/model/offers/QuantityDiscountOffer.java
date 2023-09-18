@@ -1,4 +1,4 @@
-package org.example.offers;
+package org.example.model.offers;
 
 import org.example.model.Order;
 import org.example.model.Product;

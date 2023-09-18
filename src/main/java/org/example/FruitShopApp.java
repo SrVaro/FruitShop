@@ -1,16 +1,21 @@
 package org.example;
 
 
+import org.example.fileReader.FileReader;
 import org.example.model.*;
-import org.example.offers.FreeProductOffer;
-import org.example.offers.Offer;
-import org.example.offers.QuantityDiscountOffer;
-import org.example.offers.SpendDiscountOffer;
+import org.example.model.offers.FreeProductOffer;
+import org.example.model.offers.Offer;
+import org.example.model.offers.QuantityDiscountOffer;
+import org.example.model.offers.SpendDiscountOffer;
+import org.example.parser.ProductParser;
+import org.example.parser.PurchaseParser;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Hello world!
@@ -21,14 +26,19 @@ public class FruitShopApp
 
     public static void main( String[] args )
     {
-        CSVParser parser = new CSVParser();
+        //FileReader parser = new FileReader();
 
         Map<String, Product> productMap = new HashMap<>();
-        productMap = parser.ReadProductsFile("resources/products.txt");
 
-        Order order;
+        FileReader<Product> productReader = new FileReader<>(new ProductParser());
+        List<Product> products = productReader.readFromFile("resources/products.txt", null);
 
-        order = parser.ReadPurchaseFile("resources/purchase.txt", productMap);
+        productMap = products.stream().collect(toMap(Product::getName, p -> p));
+
+        FileReader<Purchase> orderReader = new FileReader<>(new PurchaseParser());
+        List<Purchase> purchases = orderReader.readFromFile("resources/purchase.txt", productMap);
+
+        Order order = new Order(purchases);
 
         List<Offer> activeOffers = Arrays.asList(
                 new QuantityDiscountOffer(productMap.get("Apple"), 3, 2),
@@ -38,16 +48,22 @@ public class FruitShopApp
 
         order.ApplyOffers(activeOffers);
 
-        CalculateReceipt(order);
+        ShowReceipt(order);
 
     }
 
-    private static void CalculateReceipt(Order order) {
+    private static void ShowReceipt(Order order) {
 
-        System.out.println(order.getPurchaseTotalPrice());
-        System.out.println(order.getPurchases());
-        System.out.println(order.getTotalDiscount());
+        System.out.printf("\n The total price of the order is: %.2f€ \n", order.getPurchaseTotalPrice());
+        for (Purchase item: order.getPurchases()) {
+            System.out.println(item.getProduct().getName() + " " + item.getProduct().getPrice() + "€");
+        }
+
+        System.out.println("\nDiscounts:");
         System.out.println(order.getAppliedOffersDescriptions());
+        System.out.println("Thats get you a total discount of: " + order.getTotalDiscount() + "€" + "\n");
+
+        System.out.println("Thank you for your visit, come back soon! :D");
     }
 
 }

@@ -1,4 +1,4 @@
-package org.example.offers;
+package org.example.model.offers;
 
 import org.example.model.Order;
 import org.example.model.Product;
@@ -18,8 +18,10 @@ public class SpendDiscountOffer implements Offer {
                 double totalSpend = purchase.getQuantity() * product.getPrice();
                 int discountTimes = (int) (totalSpend / spendThreshold);
                 double totalDiscount = discountTimes * discountAmount;
-                order.AddDiscount(totalDiscount);
-                order.AddAppliedOfferDescription("Spend discount on " + product.getName() + ": -" + totalDiscount);
+                if(totalDiscount != 0) {
+                    order.AddDiscount(totalDiscount);
+                    order.AddAppliedOfferDescription("Spend discount on " + product.getName() + ": -" + totalDiscount);
+                }
             }
         }
     }

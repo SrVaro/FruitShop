@@ -1,13 +1,15 @@
 package org.example.model;
-import org.example.offers.Offer;
+import org.example.model.offers.Offer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.round;
+
 public class Order {
     private List<Purchase> purchases;
     private double purchaseNumber = 0;
-    private Double purchaseTotalPrice = 0.0;
+    private double purchaseTotalPrice = 0;
     private Double totalDiscount = 0.0;
     private List<String> appliedOffersDescriptions = new ArrayList<>();
 
@@ -16,6 +18,8 @@ public class Order {
         for(Purchase item : purchases) {
             purchaseTotalPrice += item.getPurchasePriceSum();
         }
+
+
 
         purchaseNumber = purchases.size();
     }
@@ -93,7 +97,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Invoice{" +
+        return "Order {" +
                 "purchases=" + purchases +
                 ", total=" + purchaseNumber +
                 ", offersApplied=" + appliedOffersDescriptions +

@@ -1,4 +1,4 @@
-package org.example.offers;
+package org.example.model.offers;
 import org.example.model.Order;
 import org.example.model.Product;
 import org.example.model.Purchase;
@@ -16,7 +16,7 @@ public class FreeProductOffer implements Offer {
             if (purchase.getProduct().equals(targetProduct)) {
                 int freeItems = purchase.getQuantity() / targetQuantity;
                 order.AddDiscount(freeProduct.getPrice() * freeItems);
-                order.AddAppliedOfferDescription("You get " + freeItems + " " + freeProduct + " for free!");
+                order.AddAppliedOfferDescription("You get " + freeItems + " " + freeProduct.getName() + " for free! ( " + freeProduct.getPrice() + "€ discount)");
             }
         }
     }

@@ -1,24 +1,23 @@
-package org.example;
+package org.example.commentedClasses;
 
 import org.example.model.Order;
 import org.example.model.Product;
 import org.example.model.Purchase;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CSVParser {
+public class OldFileReader {
 
     public Map<String, Product> ReadProductsFile(String path ) {
 
         Map<String, Product> productMap = new HashMap<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(path))) {
             String line;
             // Header Line (Not necessary right now
             br.readLine();
@@ -42,9 +41,9 @@ public class CSVParser {
 
         List<Purchase> purchaseList = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(path))) {
             String line;
-            // Header Line (Not necessary right now
+            // Header Line (We skip it as is not necessary)
             br.readLine();
 
             while ((line = br.readLine()) != null) {
